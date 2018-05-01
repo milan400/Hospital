@@ -9,8 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ActionMenuView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -19,6 +24,9 @@ import android.widget.TextView;
 public class LoginFragment extends Fragment {
 
     private TextView RegText;
+    private EditText UserName,UserPassword;
+    private Button LoginBn;;
+
     OnLoginFormActivityListener loginFormActivityListener;
 
     public interface OnLoginFormActivityListener
@@ -39,6 +47,18 @@ public class LoginFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
         RegText = view.findViewById(R.id.register_txt);
+        UserName = view.findViewById(R.id.user_name);
+        UserPassword = view.findViewById(R.id.user_pass);
+        LoginBn = view.findViewById(R.id.login_bn);
+
+        LoginBn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                performLogin();
+            }
+        });
+
+
         RegText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,6 +73,36 @@ public class LoginFragment extends Fragment {
         super.onAttach(context);
         Activity activity = (Activity) context;
         loginFormActivityListener = (OnLoginFormActivityListener) activity;
+    }
+
+    private void performLogin()
+    {
+        String username = UserName.getText().toString();
+        String password = UserPassword.getText().toString();
+
+        Call<User> call = MainActivity.apiInterface.performUserLogin(username,password);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if(response.body().getResponse().equals("ok"))
+                {
+                    MainActivity.prefConfig.writeLoginStatus(true);
+                    loginFormActivityListener.performLogin(response.body().getName());
+                }
+                else if(response.body().getResponse().equals("failed"))
+                {
+                    MainActivity.prefConfig.displayToast("Login Failed...Please try again...");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                MainActivity.prefConfig.displayToast("fail...");
+            }
+        });
+
+        UserName.setText("");
+        UserPassword.setText("");
     }
 }
 
