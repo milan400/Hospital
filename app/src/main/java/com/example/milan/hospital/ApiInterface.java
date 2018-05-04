@@ -1,8 +1,11 @@
 package com.example.milan.hospital;
 
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface ApiInterface
@@ -12,6 +15,9 @@ public interface ApiInterface
 
     @GET("login.php")
     Call<User> performUserLogin(@Query("user_name") String UserName,@Query("user_password") String UserPassword);
+
+    @POST("getsymptoms.php")
+    Call<List<Disease>>  getSymptoms();
 }
 
 
