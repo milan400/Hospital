@@ -40,6 +40,7 @@ public class PrefConfig
         return sharedPreferences.getString(context.getString(R.string.pref_user_name),"User");
     }
 
+
     public void displayToast(String message)
     {
         Toast.makeText(context,message,Toast.LENGTH_SHORT).show();

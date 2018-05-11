@@ -2,6 +2,7 @@ package com.example.milan.hospital;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
         holder.SymCheck.setText(diseases.get(position).getSymptoms());
+        Log.d("mess", String.valueOf(holder.getAdapterPosition()));
     }
 
     @Override
@@ -42,7 +44,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     public class MyViewHolder extends RecyclerView.ViewHolder
     {
 
-        CheckBox SymCheck;
+        TextView SymCheck;
 
         public MyViewHolder(View itemView) {
             super(itemView);
